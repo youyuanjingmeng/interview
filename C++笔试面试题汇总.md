@@ -33,6 +33,7 @@ int main
 5. new、delete、malloc、free的区别  
 new、delete会自动调用对象的构造和析构函数，而malloc和free不会；  
 new、delete是运算符，而malloc和free是标准库函数。  
+new、delete返回的是某种数据类型指针，malloc、free返回的是void指针。  
 
 6. `static`关键字的作用  
 1）函数体内static变量作用域为该函数体，该变量的内存只被分配一次，其值在下次调用时仍然维持上次的值；  
