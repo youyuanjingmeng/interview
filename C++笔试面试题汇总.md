@@ -42,3 +42,98 @@ new、delete返回的是某种数据类型指针，malloc、free返回的是void
 4）类中的static成员变量属于整个类所有，对类的所有对象只有一份拷贝。  
 5）类中的static成员函数属于整个类所有，该函数**不接受this指针**，只能访问**类的static成员变量**。  
 
+7. 实现`string`类的相关操作  
+```C++
+class String
+{
+    public:
+        String(const char *str = NULL);
+        String(const String &other);
+        ~String(void);
+        String &operate = (const String &other);
+    private:
+        char *m_data;
+};
+
+String::String(const char *str)
+{
+    if (NULL == str)
+    {
+        m_data = new char[1];
+        *m_data = '\0';
+    }
+    else
+    {
+        int nLen = strlen(str);
+        m_data = new char[nLen + 1];
+        strcpy(m_data, str);
+    }
+}
+
+String::~String(void)
+{
+    if (NULL != m_data)
+    {
+        delete []m_data;
+        m_data = NULL;
+    }
+}
+
+/* 拷贝构造函数 */
+String::String(const String &other)
+{
+    int nLen = strlen(other.m_data);
+    m_data = new char[nLen + 1];
+    strcpy(m_data, other.m_data);
+}
+
+/* 赋值函数 */
+String &String::operate = (const String &other)
+{
+    if (this == &other)
+    {
+        return *this;    
+    }
+
+    delete []m_data;
+    m_data = NULL;
+    int nLen = strlen(other.m_data);
+    m_data = new char[nLen + 1];
+    strcpy(m_data, other.m_data);
+    returh *this;
+}
+```
+
+8. 实现单例模式  
+```C++
+//将构造、析构声明为私有
+class Singleton
+{
+    public:
+        static Singleton *Instance();
+    private:
+        Singleton();
+        static Singleton *m_pInstance;
+};
+
+Singleton *Singleton::m_pInstance = nullptr;
+
+Singleton::Singleton()
+{
+}
+
+Singleton *Singleton::Instance()
+{
+    if (nullptr == m_pInstance)
+    {
+        m_pInstance = new Singleton;
+    }
+    return m_pInstance;
+}
+```
+9. C++多态
+多态：在基类的函数前加上`virtual`关键字，在派生类中重写该函数，运行时将根据对象的实际类型来调用相应的函数。
+如果对象类型是派生类，则调用派生类的函数；如果对象类型是基类，则调用基类的函数。  
+虚函数肯定是类的成员函数。  
+在虚函数后加  = 0，则为纯虚函数。纯虚函数必须在子类实现。  
+引入虚函数是为了`动态绑定`，引入纯虚函数是为了派生接口。  
